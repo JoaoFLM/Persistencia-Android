@@ -177,6 +177,7 @@ fun AtributosScreen(
         Button(onClick = {
             // Crie o Personagem usando os atributos passados
             val personagem = Personagem(
+                0,
                 "Placeholder",
                 forca,
                 des,
@@ -293,18 +294,12 @@ fun showMessage(message: String, callback: (String) -> Unit) {
 
 fun calculaMod(atributo: Atributo) :Int? {
     return when (atributo.getValue()) {
-        8 -> -1
-        9 -> -1
-        10 -> 0
-        11 -> 0
-        12 -> 1
-        13 -> 1
-        14 -> 2
-        15 -> 2
-        16 -> 3
-        17 -> 3
-        18 -> 4
-        19 -> 4
+        8, 9 -> -1
+        10, 11 -> 0
+        12, 13 -> 1
+        14, 15 -> 2
+        16, 17 -> 3
+        18, 19 -> 4
         20 -> 5
         else -> null
     }

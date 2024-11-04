@@ -12,7 +12,7 @@ class ResultadoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val personagem: Personagem? = intent.getParcelableExtra<Personagem>("PERSONAGEM")
+        val personagem: Personagem? = intent.getParcelableExtra("PERSONAGEM")
 
         setContent {
             ResultadoScreen(personagem)
@@ -24,14 +24,14 @@ class ResultadoActivity : ComponentActivity() {
 fun ResultadoScreen(personagem: Personagem?) {
     if (personagem != null) {
         Column {
-            Text(text = "Nome: ${personagem.Nome}")
-            Text(text = "Força: ${personagem.ForcaPJ.getValue()}")
-            Text(text = "Destreza: ${personagem.DestrezaPJ.getValue()}")
-            Text(text = "Constituição: ${personagem.ConstituicaoPJ.getValue()}")
-            Text(text = "Sabedoria: ${personagem.SabedoriaPJ.getValue()}")
-            Text(text = "Inteligência: ${personagem.InteligenciaPJ.getValue()}")
-            Text(text = "Carisma: ${personagem.CarismaPJ.getValue()}")
-            Text(text = "Pontos de vida: ${personagem.CalculaPV()}")
+            Text(text = "Nome: ${personagem.nome}")
+            Text(text = "Força: ${personagem.forcaPJ.getValue()}")
+            Text(text = "Destreza: ${personagem.destrezaPJ.getValue()}")
+            Text(text = "Constituição: ${personagem.constituicaoPJ.getValue()}")
+            Text(text = "Sabedoria: ${personagem.sabedoriaPJ.getValue()}")
+            Text(text = "Inteligência: ${personagem.inteligenciaPJ.getValue()}")
+            Text(text = "Carisma: ${personagem.carismaPJ.getValue()}")
+            Text(text = "Pontos de vida: ${personagem.calculaPV()}")
         }
     } else {
         Text(text = "Nenhum personagem recebido.")
