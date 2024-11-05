@@ -2,9 +2,13 @@ package Atributos
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-class Destreza (var att: Int = 8) : Atributo  {
+@Entity(tableName="destreza")
+data class Destreza (@PrimaryKey(autoGenerate = true) var id:Int = 0,var att: Int = 8) : Atributo  {
     constructor(parcel: Parcel) : this(parcel.readInt())
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(att)

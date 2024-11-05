@@ -7,7 +7,6 @@ import Atributos.Destreza
 import Atributos.Forca
 import Atributos.Inteligencia
 import Atributos.Sabedoria
-import Personagem
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -175,22 +174,31 @@ fun AtributosScreen(
         }
 
         Button(onClick = {
-            // Crie o Personagem usando os atributos passados
             val personagem = Personagem(
                 0,
                 "Placeholder",
-                forca,
-                des,
-                con,
-                int,
-                car,
-                sab
+                forca.id,
+                des.id,
+                con.id,
+                int.id,
+                car.id,
+                sab.id
             )
+
+
 
             val intent = Intent(context, ResultadoActivity::class.java).apply {
                 putExtra("PERSONAGEM", personagem)
+                putExtra("FORCA", forca)
+                putExtra("DESTREZA", des)
+                putExtra("CONSTITUICAO", con)
+                putExtra("INTELIGENCIA", int)
+                putExtra("CARISMA", car)
+                putExtra("SABEDORIA", sab)
             }
-            context.startActivity(intent) // Use o contexto para iniciar a atividade
+
+
+            context.startActivity(intent)
         }) {
             Text("Salvar atributos")
         }
@@ -213,14 +221,12 @@ fun AtributoInputRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Coluna de Atributos
+
         Text(text = label, modifier = Modifier.weight(1f))
 
-        // Campo de entrada de número inteiro
         OutlinedTextField(
             value = attValue,
             onValueChange = { newValue ->
-                // Permitir apenas números
                 if (newValue.all { it.isDigit() }) {
                     attValue = newValue
                 }
@@ -304,6 +310,3 @@ fun calculaMod(atributo: Atributo) :Int? {
         else -> null
     }
 }
-
-
-
