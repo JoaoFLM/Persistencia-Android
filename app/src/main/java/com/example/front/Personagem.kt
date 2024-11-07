@@ -1,9 +1,13 @@
 import Atributos.*
-import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
-
-class Personagem(
+@Entity(tableName = "personagem")
+@Parcelize
+data class Personagem(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var Nome: String,
     var ForcaPJ: Forca,
     var DestrezaPJ: Destreza,
@@ -11,42 +15,7 @@ class Personagem(
     var InteligenciaPJ: Inteligencia,
     var CarismaPJ: Carisma,
     var SabedoriaPJ: Sabedoria,
-    //var Raca: Raca
-    ) : Parcelable
-    {
-        constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readParcelable(Forca::class.java.classLoader) ?: Forca(),
-        parcel.readParcelable(Destreza::class.java.classLoader) ?: Destreza(),
-        parcel.readParcelable(Constituicao::class.java.classLoader) ?: Constituicao(),
-        parcel.readParcelable(Inteligencia::class.java.classLoader) ?: Inteligencia(),
-        parcel.readParcelable(Carisma::class.java.classLoader) ?: Carisma(),
-        parcel.readParcelable(Sabedoria::class.java.classLoader) ?: Sabedoria()
-        )
-
-        override fun writeToParcel(parcel: Parcel, flags: Int) {
-            parcel.writeString(Nome)
-            parcel.writeParcelable(ForcaPJ, flags)
-            parcel.writeParcelable(DestrezaPJ, flags)
-            parcel.writeParcelable(ConstituicaoPJ, flags)
-            parcel.writeParcelable(InteligenciaPJ, flags)
-            parcel.writeParcelable(CarismaPJ, flags)
-            parcel.writeParcelable(SabedoriaPJ, flags)
-        }
-
-        override fun describeContents(): Int {
-            return 0
-        }
-
-        companion object CREATOR : Parcelable.Creator<Personagem> {
-            override fun createFromParcel(parcel: Parcel): Personagem {
-                return Personagem(parcel)
-            }
-
-            override fun newArray(size: Int): Array<Personagem?> {
-                return arrayOfNulls(size)
-            }
-        }
+    ) : Parcelable {
 
         fun ComprarAtributos(atributo: Atributo, pontosGastos: Int) : Int {
             return atributo.GastarPontos(pontosGastos)

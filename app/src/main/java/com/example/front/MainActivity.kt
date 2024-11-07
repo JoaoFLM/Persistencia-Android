@@ -175,8 +175,8 @@ fun AtributosScreen(
         }
 
         Button(onClick = {
-            // Crie o Personagem usando os atributos passados
             val personagem = Personagem(
+                0,
                 "Placeholder",
                 forca,
                 des,
@@ -189,7 +189,8 @@ fun AtributosScreen(
             val intent = Intent(context, ResultadoActivity::class.java).apply {
                 putExtra("PERSONAGEM", personagem)
             }
-            context.startActivity(intent) // Use o contexto para iniciar a atividade
+            context.startActivity(intent)
+
         }) {
             Text("Salvar atributos")
         }

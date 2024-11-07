@@ -2,27 +2,16 @@ package Atributos
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
-class Carisma(var att: Int = 8) : Atributo {
-    constructor(parcel: Parcel) : this(parcel.readInt())
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(att)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Carisma> {
-        override fun createFromParcel(parcel: Parcel): Carisma {
-            return Carisma(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Carisma?> {
-            return arrayOfNulls(size)
-        }
-    }
+@Parcelize
+@Entity(tableName = "carisma")
+data class Carisma(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var att: Int = 8
+) : Atributo, Parcelable {
 
     override fun GastarPontos(pontos: Int) : Int {
         if (pontos in 8..15) {

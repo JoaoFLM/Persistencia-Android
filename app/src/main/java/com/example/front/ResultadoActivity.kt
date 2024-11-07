@@ -1,24 +1,47 @@
 package com.example.front
 
 import Personagem
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 
 class ResultadoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val personagem: Personagem? = intent.getParcelableExtra<Personagem>("PERSONAGEM")
-
-        setContent {
-            ResultadoScreen(personagem)
+        try {
+            val personagem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("PERSONAGEM", Personagem::class.java)!!
+            } else {
+                intent.getParcelableExtra("PERSONAGEM")!!
+            }
+            setContent {
+                ResultadoScreen(personagem)
+            }
+        }catch (e: NullPointerException)
+        {
+            setContent{
+                val context = LocalContext.current
+                Text(text = "Personagem invalido")
+                Button(onClick = {
+                    val intent = Intent(this, MainActivity::class.java).apply {}
+                    context.startActivity(intent)
+                }) {
+                    Text(text = "Voltar")
+                }
+            }
         }
     }
 }
+
 
 @Composable
 fun ResultadoScreen(personagem: Personagem?) {
