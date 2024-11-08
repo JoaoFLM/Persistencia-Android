@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.example.front.DAO.PersonagemDatabase
 
 class ResultadoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +23,22 @@ class ResultadoActivity : ComponentActivity() {
                 intent.getParcelableExtra("PERSONAGEM", Personagem::class.java)!!
             } else {
                 intent.getParcelableExtra("PERSONAGEM")!!
+            }
+
+            try{
+                val db = PersonagemDatabase.getDatabase(this)
+                val personagemDAO = db.getPersonagemDAO()
+            }catch(e: NullPointerException){
+                setContent{
+                    val context = LocalContext.current
+                    Text(text = "Erro ao carregar o banco de dados")
+                    Button(onClick = {
+                        val intent = Intent(this, MainActivity::class.java).apply {}
+                        context.startActivity(intent)
+                    }) {
+                        Text(text = "Voltar")
+                    }
+                }
             }
             setContent {
                 ResultadoScreen(personagem)
@@ -45,18 +62,18 @@ class ResultadoActivity : ComponentActivity() {
 
 @Composable
 fun ResultadoScreen(personagem: Personagem?) {
-    if (personagem != null) {
-        Column {
-            Text(text = "Nome: ${personagem.Nome}")
-            Text(text = "Força: ${personagem.ForcaPJ.getValue()}")
-            Text(text = "Destreza: ${personagem.DestrezaPJ.getValue()}")
-            Text(text = "Constituição: ${personagem.ConstituicaoPJ.getValue()}")
-            Text(text = "Sabedoria: ${personagem.SabedoriaPJ.getValue()}")
-            Text(text = "Inteligência: ${personagem.InteligenciaPJ.getValue()}")
-            Text(text = "Carisma: ${personagem.CarismaPJ.getValue()}")
-            Text(text = "Pontos de vida: ${personagem.CalculaPV()}")
-        }
-    } else {
-        Text(text = "Nenhum personagem recebido.")
-    }
+//    if (personagem != null) {
+//        Column {
+//            Text(text = "Nome: ${personagem.Nome}")
+//            Text(text = "Força: ${personagem.ForcaPJ.getValue()}")
+//            Text(text = "Destreza: ${personagem.DestrezaPJ.getValue()}")
+//            Text(text = "Constituição: ${personagem.ConstituicaoPJ.getValue()}")
+//            Text(text = "Sabedoria: ${personagem.SabedoriaPJ.getValue()}")
+//            Text(text = "Inteligência: ${personagem.InteligenciaPJ.getValue()}")
+//            Text(text = "Carisma: ${personagem.CarismaPJ.getValue()}")
+//            Text(text = "Pontos de vida: ${personagem.CalculaPV()}")
+//        }
+//    } else {
+//        Text(text = "Nenhum personagem recebido.")
+//    }
 }
