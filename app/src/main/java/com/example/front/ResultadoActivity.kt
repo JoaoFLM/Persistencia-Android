@@ -1,11 +1,13 @@
 package com.example.front
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,46 +33,38 @@ class ResultadoActivity : ComponentActivity() {
                 intent.getParcelableExtra("PERSONAGEM")!!
             }
 
-            try{
-                setContent {
-                    val personagem_db = PersonagemDatabase.getDatabase(this)
-                    val viewModel = viewModel<ResultadoViewModel>(
-                        factory = object : ViewModelProvider.Factory {
-                            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                                return ResultadoViewModel(
-                                    personagem_db
-                                ) as T
-                            }
+            setContent {
+                val personagem_db = PersonagemDatabase.getDatabase(this)
+                val viewModel = viewModel<ResultadoViewModel>(
+                    factory = object : ViewModelProvider.Factory {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                            return ResultadoViewModel(
+                                personagem_db
+                            ) as T
                         }
-                    )
-
-                    viewModel.insertPersonagem(pj)
-                    val PJLista = viewModel.getAll()
-                    ResultadoScreen(PJLista)
-                }
-            }catch(e: NullPointerException){
-                setContent{
-                    val context = LocalContext.current
-                    Text(text = "Erro ao carregar o banco de dados")
-                    Button(onClick = {
-                        val intent = Intent(this, MainActivity::class.java).apply {}
-                        context.startActivity(intent)
-                    }) {
-                        Text(text = "Voltar")
                     }
-                }
+                )
+
+                viewModel.insertPersonagem(pj)
+                val PJLista = viewModel.getAll()
+                ResultadoScreen(PJLista, this)
             }
         }catch (e: NullPointerException)
         {
-            setContent{
-                val context = LocalContext.current
-                Text(text = "Personagem invalido")
-                Button(onClick = {
-                    val intent = Intent(this, MainActivity::class.java).apply {}
-                    context.startActivity(intent)
-                }) {
-                    Text(text = "Voltar")
-                }
+            setContent {
+                val personagem_db = PersonagemDatabase.getDatabase(this)
+                val viewModel = viewModel<ResultadoViewModel>(
+                    factory = object : ViewModelProvider.Factory {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                            return ResultadoViewModel(
+                                personagem_db
+                            ) as T
+                        }
+                    }
+                )
+
+                val PJLista = viewModel.getAll()
+                ResultadoScreen(PJLista, this)
             }
         }
     }
@@ -78,18 +72,37 @@ class ResultadoActivity : ComponentActivity() {
 
 
 @Composable
-fun ResultadoScreen(personagens: List<Personagem>) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Lista de Personagens")
+fun ResultadoScreen(personagens: List<Personagem>, context: Context) {
+    Row(modifier = Modifier.padding(16.dp)) {
+        // Primeiro Column
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = "Lista de Personagens")
 
-        LazyColumn {
-            items(personagens) { personagem ->
-                Card(modifier = Modifier.padding(8.dp)) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = personagem.nome)
+            LazyColumn {
+                items(personagens) { personagem ->
+                    Card(modifier = Modifier.padding(8.dp)) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = ""
+                                    + personagem.PersonagemId + "\n"
+                                    + personagem.nome + "\n"
+                                    + personagem.forca + "\n"
+                                    + personagem.destreza + "\n"
+                                    + personagem.constituicao + "\n"
+                                    + personagem.inteligencia + "\n"
+                                    + personagem.sabedoria + "\n"
+                                    + personagem.carisma)
+                        }
                     }
                 }
             }
+        }
+
+        // Segundo Column
+        Column(modifier = Modifier.weight(1f).padding(start = 16.dp)) {
+            Button(onClick = {
+                val intent = Intent(context, DeletarPersonagemActivity::class.java).apply {}
+                context.startActivity(intent)
+            }) { Text(text = "Deletar") }
         }
     }
 }

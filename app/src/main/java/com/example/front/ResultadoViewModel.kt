@@ -18,4 +18,9 @@ class ResultadoViewModel(
         return personagemDAO.getAll()
     }
 
+    fun deletarPersonagem(id:Int){
+        val pjToDelete = personagemDAO.getPersonagemById(id)
+        personagemDAO.deletePersonagem(pjToDelete)
+    }
+
 }

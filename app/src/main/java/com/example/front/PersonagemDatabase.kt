@@ -12,7 +12,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.front.PersonagemDAO
 
-@Database(entities = [Personagem::class, Carisma::class, Constituicao::class, Destreza::class, Forca::class, Inteligencia::class, Sabedoria::class], version = 4, exportSchema = false)
+@Database(entities = [Personagem::class, Carisma::class, Constituicao::class, Destreza::class, Forca::class, Inteligencia::class, Sabedoria::class], version = 5, exportSchema = false)
 abstract class PersonagemDatabase : RoomDatabase(){
 
     abstract fun getPersonagemDAO(): PersonagemDAO

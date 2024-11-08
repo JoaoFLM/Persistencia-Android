@@ -77,6 +77,7 @@ fun AtributosScreen(
     var pontosRestantes by remember { mutableStateOf(pontos) }
     var snackbarVisible by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     val context = LocalContext.current
 
     Column(modifier = Modifier.padding(16.dp)) {
@@ -98,6 +99,10 @@ fun AtributosScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+        nameInput(
+            {name = it}
+        )
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -122,7 +127,6 @@ fun AtributosScreen(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-
         AtributoInputRow(
             "Força",
             forca,
@@ -175,13 +179,13 @@ fun AtributosScreen(
         Button(onClick = {
             val personagem = Personagem(
                 0,
-                "Placeholder",
-                forca.ForcaId,
-                des.DestrezaId,
-                con.ConstituicaoId,
-                int.InteligenciaId,
-                car.CarismaId,
-                sab.SabedoriaId
+                name,
+                forca.att,
+                des.att,
+                con.att,
+                int.att,
+                car.att,
+                sab.att
             )
 
             val intent = Intent(context, ResultadoActivity::class.java).apply {
@@ -193,6 +197,22 @@ fun AtributosScreen(
             Text("Salvar atributos")
         }
     }
+}
+
+@Composable
+fun nameInput(inserirNome: (String) -> Unit) {
+    var attName by remember { mutableStateOf("") }
+
+    OutlinedTextField(
+        value = attName,
+        onValueChange = { newName ->
+            attName = newName
+            inserirNome(attName)
+        },
+        modifier = Modifier
+            .width(200.dp),
+        label = { Text("Nome") }
+    )
 }
 
 
@@ -296,6 +316,5 @@ fun calculaMod(atributo: Atributo) :Int? {
         else -> null
     }
 }
-
 
 

@@ -15,6 +15,7 @@
         <activity
             android:name=".ResultadoActivity"
             />
+        <activity android:name=".DeletarPersonagemActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
