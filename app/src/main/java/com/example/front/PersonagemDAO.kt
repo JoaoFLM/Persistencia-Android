@@ -1,6 +1,5 @@
-package com.example.front.DAO
+package com.example.front
 
-import Personagem
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -8,20 +7,21 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface PersonagemDAO{
+interface PersonagemDAO {
 
     @Insert
     fun insertPersonagem(personagem: Personagem)
 
-    @Update
-    fun updatePersonagem(Personagem: Personagem)
-
     @Delete
-    fun deletePersonagem(Personagem: Personagem)
+    fun deletePersonagem(personagem: Personagem)
+
+    @Update
+    fun updatePersonagem(personagem: Personagem)
 
     @Query("SELECT * FROM personagem")
     fun getAll(): List<Personagem>
 
-    @Query("SELECT * FROM personagem WHERE id = :id")
-    fun getById(id:Int): List<Personagem>
+    @Query("SELECT * FROM personagem WHERE PersonagemId = :id")
+    fun getPersonagemById(id: Int) : Personagem
+
 }

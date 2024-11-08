@@ -1,33 +1,53 @@
 package com.example.front
 
-import Personagem
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.front.DAO.PersonagemDatabase
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class ResultadoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         try {
-            val personagem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val pj = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra("PERSONAGEM", Personagem::class.java)!!
             } else {
                 intent.getParcelableExtra("PERSONAGEM")!!
             }
 
             try{
-                val db = PersonagemDatabase.getDatabase(this)
-                val personagemDAO = db.getPersonagemDAO()
+                setContent {
+                    val personagem_db = PersonagemDatabase.getDatabase(this)
+                    val viewModel = viewModel<ResultadoViewModel>(
+                        factory = object : ViewModelProvider.Factory {
+                            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                                return ResultadoViewModel(
+                                    personagem_db
+                                ) as T
+                            }
+                        }
+                    )
+
+                    viewModel.insertPersonagem(pj)
+                    val PJLista = viewModel.getAll()
+                    ResultadoScreen(PJLista)
+                }
             }catch(e: NullPointerException){
                 setContent{
                     val context = LocalContext.current
@@ -39,9 +59,6 @@ class ResultadoActivity : ComponentActivity() {
                         Text(text = "Voltar")
                     }
                 }
-            }
-            setContent {
-                ResultadoScreen(personagem)
             }
         }catch (e: NullPointerException)
         {
@@ -61,19 +78,19 @@ class ResultadoActivity : ComponentActivity() {
 
 
 @Composable
-fun ResultadoScreen(personagem: Personagem?) {
-//    if (personagem != null) {
-//        Column {
-//            Text(text = "Nome: ${personagem.Nome}")
-//            Text(text = "Força: ${personagem.ForcaPJ.getValue()}")
-//            Text(text = "Destreza: ${personagem.DestrezaPJ.getValue()}")
-//            Text(text = "Constituição: ${personagem.ConstituicaoPJ.getValue()}")
-//            Text(text = "Sabedoria: ${personagem.SabedoriaPJ.getValue()}")
-//            Text(text = "Inteligência: ${personagem.InteligenciaPJ.getValue()}")
-//            Text(text = "Carisma: ${personagem.CarismaPJ.getValue()}")
-//            Text(text = "Pontos de vida: ${personagem.CalculaPV()}")
-//        }
-//    } else {
-//        Text(text = "Nenhum personagem recebido.")
-//    }
+fun ResultadoScreen(personagens: List<Personagem>) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(text = "Lista de Personagens")
+
+        LazyColumn {
+            items(personagens) { personagem ->
+                Card(modifier = Modifier.padding(8.dp)) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(text = personagem.nome)
+                    }
+                }
+            }
+        }
+    }
 }
+

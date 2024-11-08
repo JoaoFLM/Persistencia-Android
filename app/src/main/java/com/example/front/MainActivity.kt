@@ -7,7 +7,6 @@ import Atributos.Destreza
 import Atributos.Forca
 import Atributos.Inteligencia
 import Atributos.Sabedoria
-import Personagem
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -100,7 +99,6 @@ fun AtributosScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // colunas
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -178,12 +176,12 @@ fun AtributosScreen(
             val personagem = Personagem(
                 0,
                 "Placeholder",
-                forca,
-                des,
-                con,
-                int,
-                car,
-                sab
+                forca.ForcaId,
+                des.DestrezaId,
+                con.ConstituicaoId,
+                int.InteligenciaId,
+                car.CarismaId,
+                sab.SabedoriaId
             )
 
             val intent = Intent(context, ResultadoActivity::class.java).apply {
@@ -213,14 +211,11 @@ fun AtributoInputRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Coluna de Atributos
         Text(text = label, modifier = Modifier.weight(1f))
 
-        // Campo de entrada de número inteiro
         OutlinedTextField(
             value = attValue,
             onValueChange = { newValue ->
-                // Permitir apenas números
                 if (newValue.all { it.isDigit() }) {
                     attValue = newValue
                 }
@@ -235,10 +230,10 @@ fun AtributoInputRow(
                     if (!focusState.isFocused && attValue.isNotEmpty()) {
                         try {
                             val valor = attValue.toInt()
-                            updatePontos(atributo.GastarPontos(valor)) // Atualiza os pontos
+                            updatePontos(atributo.GastarPontos(valor))
                         } catch (e: NumberFormatException) {
                             onError("Por favor, insira um número válido.")
-                            attValue = "" // Limpa o campo em caso de erro
+                            attValue = ""
                         } catch(e: IllegalArgumentException){
                             onError("O valor deve estar entre 8 e 15")
                             attValue = ""
@@ -247,11 +242,9 @@ fun AtributoInputRow(
                 }
         )
 
-        // Coluna Bônus de Raça
         OutlinedTextField(
             value = racaValue,
             onValueChange = { newRaca ->
-                // Permitir apenas números
                 if (newRaca.all { it.isDigit() }) {
                     racaValue = newRaca
                 }
@@ -269,7 +262,7 @@ fun AtributoInputRow(
                             atributo.addRaca(valor)
                         } catch (e: NumberFormatException) {
                             onError("Por favor, insira um número válido.")
-                            racaValue = "" // Limpa o campo em caso de erro
+                            racaValue = ""
                         } catch(e: IllegalArgumentException){
                             onError("O valor deve estar entre -1 e 2")
                             racaValue = ""
@@ -278,7 +271,6 @@ fun AtributoInputRow(
                 }
         )
 
-        // Coluna Mod
         Text(
             text = "${calculaMod(atributo)}",
             modifier = Modifier.weight(1f),
@@ -294,18 +286,12 @@ fun showMessage(message: String, callback: (String) -> Unit) {
 
 fun calculaMod(atributo: Atributo) :Int? {
     return when (atributo.getValue()) {
-        8 -> -1
-        9 -> -1
-        10 -> 0
-        11 -> 0
-        12 -> 1
-        13 -> 1
-        14 -> 2
-        15 -> 2
-        16 -> 3
-        17 -> 3
-        18 -> 4
-        19 -> 4
+        8,9 -> -1
+        10,11 -> 0
+        12,13 -> 1
+        14,15 -> 2
+        16,17 -> 3
+        18,19 -> 4
         20 -> 5
         else -> null
     }

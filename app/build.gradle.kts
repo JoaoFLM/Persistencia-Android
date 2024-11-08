@@ -66,6 +66,12 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+    val lifecycle_version = "2.8.5"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+
+
     // Versão do Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -109,5 +115,5 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }

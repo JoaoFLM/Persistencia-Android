@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "inteligencia")
 data class Inteligencia (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val InteligenciaId: Int = 0,
     var att: Int = 8
 ) : Atributo, Parcelable {
 
